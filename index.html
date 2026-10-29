@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUBBI — Frozen Heights</title>
+  <link rel="stylesheet" href="src/ui/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- ===== ГЛАВНОЕ МЕНЮ ===== -->
+  <div id="main-menu" class="screen">
+    <div class="menu-bg"></div>
+    <div class="menu-panel">
+      <h1 class="game-title">HUBBI<span class="dot">.</span></h1>
+      <h2 class="game-subtitle">FROZEN HEIGHTS</h2>
+      <div class="menu-buttons">
+        <button id="btn-play" class="menu-btn primary">▶ ИГРАТЬ</button>
+        <button id="btn-shop" class="menu-btn">МАГАЗИН</button>
+        <button id="btn-settings" class="menu-btn">НАСТРОЙКИ</button>
+      </div>
+      <div class="player-card">
+        <div class="avatar-preview" id="avatar-preview"></div>
+        <div class="player-info">
+          <div class="player-name-row">
+            <input id="player-name" maxlength="14" value="Hubbi" spellcheck="false" />
+          </div>
+          <div class="stats-row">
+            <span class="stat"><b id="stat-level">1</b> ур.</span>
+            <span class="stat coin">🪙 <b id="stat-coins">0</b></span>
+            <span class="stat gem">💎 <b id="stat-gems">50</b></span>
+          </div>
+        </div>
+      </div>
+      <p class="hint">WASD — движение · Пробел — прыжок · Shift — спринт · F — присесть · E — взаимодействие · Q — рывок</p>
+    </div>
+  </div>
+
+  <!-- ===== МАГАЗИН ===== -->
+  <div id="shop-screen" class="screen hidden">
+    <div class="shop-panel">
+      <h2>МАГАЗИН</h2>
+      <div class="shop-currency">
+        <span class="stat coin">🪙 <b class="coins-live">0</b></span>
+        <span class="stat gem">💎 <b class="gems-live">50</b></span>
+      </div>
+      <div id="shop-items" class="shop-grid"></div>
+      <button id="btn-shop-close" class="menu-btn">← НАЗАД</button>
+    </div>
+  </div>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud" class="hidden">
+    <div class="hud-top-left">
+      <div class="hp-bar-wrap">
+        <div class="hp-icon">❤</div>
+        <div class="hp-bar"><div id="hp-fill" class="hp-fill"></div></div>
+        <span id="hp-text">100</span>
+      </div>
+      <div class="stamina-bar-wrap">
+        <div class="st-icon">⚡</div>
+        <div class="st-bar"><div id="st-fill" class="st-fill"></div></div>
+      </div>
+    </div>
+    <div class="hud-top-right">
+      <div class="level-badge">LVL <span id="hud-level">1</span></div>
+      <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
+      <div class="hud-coins">🪙 <span class="coins-live">0</span> · 💎 <span class="gems-live">0</span></div>
+    </div>
+    <div class="hud-bottom-center">
+      <div id="hotbar" class="hotbar"></div>
+    </div>
+    <div id="crosshair">+</div>
+    <div id="interact-hint" class="hidden">Нажми <b>E</b></div>
+    <div id="toast-container"></div>
+    <div id="death-overlay" class="hidden">
+      <div class="death-panel">
+        <h2>💀 ТЫ УПАЛ!</h2>
+        <p>Замёрзший хабби не сдаётся!</p>
+        <button id="btn-respawn" class="menu-btn primary">ВОЗРОДИТЬСЯ</button>
+        <button id="btn-to-menu" class="menu-btn">В МЕНЮ</button>
+      </div>
+    </div>
+    <button id="btn-pause" title="Меню (Esc)">☰</button>
+  </div>
+
+  <canvas id="game-canvas"></canvas>
+  <div id="loading">Загрузка горнолыжного курорта… ❄</div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

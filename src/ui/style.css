@@ -1,0 +1,161 @@
+/* ===== HUBBI — Frozen Heights · UI ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Segoe UI", Arial, sans-serif; }
+body { background: #0b1e33; user-select: none; }
+
+#game-canvas { position: fixed; inset: 0; display: block; }
+
+.hidden { display: none !important; }
+
+#loading {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #cfeaff; font-size: 22px; background: linear-gradient(#0b1e33, #14385e); z-index: 100;
+}
+
+/* ===== Экраны ===== */
+.screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 50; }
+.menu-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(120,200,255,.25), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,255,255,.12), transparent 45%),
+    linear-gradient(160deg, #0a1c30 0%, #134877 45%, #1d6fa5 75%, #bfe6ff 100%);
+}
+.menu-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 12% 22%, #fff 60%, transparent),
+    radial-gradient(3px 3px at 35% 8%, #e8f6ff 60%, transparent),
+    radial-gradient(2px 2px at 60% 30%, #fff 60%, transparent),
+    radial-gradient(2.5px 2.5px at 82% 15%, #dff 60%, transparent),
+    radial-gradient(2px 2px at 90% 45%, #fff 60%, transparent),
+    radial-gradient(3px 3px at 25% 55%, #fff 60%, transparent),
+    radial-gradient(2px 2px at 50% 70%, #eaf6ff 60%, transparent),
+    radial-gradient(2px 2px at 72% 62%, #fff 60%, transparent);
+  animation: snowfall 9s linear infinite; opacity: .8;
+}
+@keyframes snowfall { from { transform: translateY(-6%);} to { transform: translateY(6%);} }
+
+.menu-panel {
+  position: relative; text-align: center; padding: 34px 46px; border-radius: 22px;
+  background: rgba(8, 26, 46, .72); backdrop-filter: blur(8px);
+  border: 1px solid rgba(140, 210, 255, .35); box-shadow: 0 18px 60px rgba(0,0,0,.5);
+}
+.game-title { font-size: 64px; color: #fff; letter-spacing: 6px; text-shadow: 0 0 24px #4fc3ff; }
+.game-title .dot { color: #ffb400; }
+.game-subtitle { font-size: 18px; color: #9fdcff; letter-spacing: 10px; margin-bottom: 26px; font-weight: 600; }
+
+.menu-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.menu-btn {
+  padding: 13px 34px; font-size: 17px; font-weight: 700; letter-spacing: 2px; cursor: pointer;
+  color: #eaffff; background: rgba(30, 80, 130, .8); border: 2px solid rgba(120, 200, 255, .4);
+  border-radius: 12px; transition: transform .12s, background .12s, box-shadow .12s;
+}
+.menu-btn:hover { transform: scale(1.05); background: rgba(45, 110, 170, .9); box-shadow: 0 0 18px rgba(90,190,255,.5); }
+.menu-btn.primary { background: linear-gradient(#ffc93c, #ff9e00); color: #3a2600; border-color: #ffe28a; }
+.menu-btn.primary:hover { box-shadow: 0 0 24px rgba(255,190,60,.7); }
+
+.player-card { display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 16px; }
+.avatar-preview {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe9a8, #f7c948 55%, #d99b16);
+  border: 3px solid #fff2c2; box-shadow: 0 0 16px rgba(255, 210, 90, .6);
+  position: relative;
+}
+.avatar-preview::before, .avatar-preview::after {
+  content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #222; top: 24px;
+}
+.avatar-preview::before { left: 18px; } .avatar-preview::after { right: 18px; }
+#player-name {
+  font-size: 20px; font-weight: 700; color: #fff; background: transparent; border: none;
+  border-bottom: 2px dashed rgba(150,210,255,.5); outline: none; width: 160px; text-align: center;
+}
+.stats-row { display: flex; gap: 14px; margin-top: 8px; color: #cfeaff; font-size: 15px; }
+.stat b { color: #fff; }
+.coin b, .coin { color: #ffd23f; } .gem b, .gem { color: #6ee7ff; }
+.hint { color: #8ab9dd; font-size: 12.5px; max-width: 420px; margin: 0 auto; line-height: 1.6; }
+
+/* ===== Магазин ===== */
+.shop-panel {
+  position: relative; width: min(720px, 92vw); max-height: 86vh; overflow-y: auto; text-align: center;
+  padding: 28px; border-radius: 20px; background: rgba(8,26,46,.85); border: 1px solid rgba(140,210,255,.35);
+}
+.shop-panel h2 { color: #fff; letter-spacing: 4px; margin-bottom: 12px; }
+.shop-currency { display: flex; gap: 18px; justify-content: center; margin-bottom: 18px; font-size: 17px; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.shop-item {
+  padding: 14px 10px; border-radius: 14px; background: rgba(30,70,110,.6); border: 2px solid rgba(120,200,255,.25);
+  color: #eaffff; cursor: pointer; transition: transform .1s, border-color .1s;
+}
+.shop-item:hover { transform: translateY(-3px); border-color: #7fd4ff; }
+.shop-item .ico { font-size: 34px; }
+.shop-item .nm { font-weight: 700; margin: 6px 0 2px; font-size: 14px; }
+.shop-item .ds { font-size: 11.5px; color: #9cc6e4; min-height: 28px; }
+.shop-item .pr { margin-top: 6px; font-weight: 700; font-size: 14px; color: #ffd23f; }
+.shop-item.gem-price .pr { color: #6ee7ff; }
+.shop-item.owned { border-color: #58d68d; opacity: .75; cursor: default; }
+.shop-item.owned .pr { color: #58d68d; }
+
+/* ===== HUD ===== */
+#hud { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+#hud button { pointer-events: auto; }
+.hud-top-left { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 8px; }
+.hp-bar-wrap, .stamina-bar-wrap { display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 700; }
+.hp-icon, .st-icon { font-size: 18px; text-shadow: 0 1px 3px #000; }
+.hp-bar, .st-bar { width: 220px; height: 18px; background: rgba(0,0,0,.45); border-radius: 9px; border: 2px solid rgba(255,255,255,.35); overflow: hidden; }
+.st-bar { height: 10px; width: 160px; }
+.hp-fill { height: 100%; width: 100%; background: linear-gradient(#ff6b6b, #e03131); transition: width .2s; }
+.st-fill { height: 100%; width: 100%; background: linear-gradient(#ffe066, #fab005); transition: width .1s; }
+
+.hud-top-right { position: absolute; top: 16px; right: 16px; text-align: right; color: #fff; }
+.level-badge {
+  display: inline-block; background: linear-gradient(#ffc93c, #ff9e00); color: #3a2600;
+  font-weight: 900; padding: 4px 14px; border-radius: 14px; font-size: 15px; box-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+.xp-bar { width: 180px; height: 8px; margin: 6px 0 6px auto; background: rgba(0,0,0,.45); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,.3); }
+.xp-fill { height: 100%; width: 0%; background: linear-gradient(#7ed4ff, #2f9bff); transition: width .3s; }
+.hud-coins { font-size: 15px; font-weight: 700; text-shadow: 0 1px 4px #000; }
+
+.hotbar { display: flex; gap: 8px; justify-content: center; }
+.hot-slot {
+  width: 52px; height: 52px; border-radius: 10px; background: rgba(0,0,0,.4);
+  border: 2px solid rgba(255,255,255,.3); display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: #fff; position: relative;
+}
+.hot-slot .key { position: absolute; top: 1px; left: 4px; font-size: 10px; color: #9cc6e4; font-weight: 700; }
+.hot-slot.active { border-color: #ffd23f; box-shadow: 0 0 12px rgba(255,210,63,.6); }
+
+#crosshair {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%);
+  color: rgba(255,255,255,.85); font-size: 22px; font-weight: 300; text-shadow: 0 0 4px #000;
+}
+#interact-hint {
+  position: absolute; top: 56%; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.55); color: #fff; padding: 8px 16px; border-radius: 10px; font-size: 15px;
+  border: 1px solid rgba(255,255,255,.25);
+}
+#interact-hint b { color: #ffd23f; }
+
+#toast-container { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.toast {
+  background: rgba(10,35,60,.9); border: 1px solid rgba(127,212,255,.5); color: #eaffff;
+  padding: 9px 20px; border-radius: 12px; font-size: 15px; font-weight: 600;
+  animation: toast-in .25s ease-out, toast-out .4s ease-in 2.6s forwards; box-shadow: 0 4px 18px rgba(0,0,0,.4);
+}
+.toast.gold { border-color: #ffd23f; color: #ffe9a8; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-12px);} to { opacity: 1; transform: none;} }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-8px);} }
+
+#death-overlay {
+  position: absolute; inset: 0; background: rgba(20, 5, 10, .55); display: flex; align-items: center; justify-content: center;
+  pointer-events: auto; backdrop-filter: blur(3px);
+}
+.death-panel { text-align: center; background: rgba(10,25,45,.92); padding: 34px 50px; border-radius: 20px; border: 1px solid rgba(255,120,120,.4); }
+.death-panel h2 { color: #ff8a8a; margin-bottom: 8px; letter-spacing: 2px; }
+.death-panel p { color: #cfeaff; margin-bottom: 18px; }
+.death-panel .menu-btn { margin: 4px; }
+
+#btn-pause {
+  position: absolute; bottom: 18px; right: 18px; width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(0,0,0,.45); color: #fff; border: 1px solid rgba(255,255,255,.3); font-size: 20px; cursor: pointer;
+}
